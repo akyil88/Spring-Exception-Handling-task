@@ -1,9 +1,8 @@
 package de.neuefische.springexceptionhandlingtask;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import de.neuefische.springexceptionhandlingtask.exception.ApiError;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
 
@@ -23,4 +22,12 @@ public class AnimalController {
     String getAllAnimals() {
         throw new NoSuchElementException("No Animals found");
     }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiError handleNoSuchElementException(NoSuchElementException exception) {
+        exception.printStackTrace();
+        return new ApiError(exception.getMessage());
+    }
+
 }
